@@ -2,9 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import Weather from './components/Weather';
+import SearchBar from './components/SearchBar'
 
 const API_KEY = "01bd3c5047d97a5d22c0cc1d71c2c057";
-const API = "https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}";
 
 export default function App() {
 
@@ -22,7 +22,7 @@ export default function App() {
       } else {
         setWeatherData(null);
       }
-      // setLoaded(true);
+       setLoaded(true);
     } catch (error) {
       console.log(error);
     }
@@ -30,7 +30,7 @@ export default function App() {
 
   useEffect(() => {
     fetchWeatherData('Mumbai');
-    console.log(weatherData);
+
   }, [])
 
   if (!loaded) {
@@ -42,6 +42,8 @@ export default function App() {
   } else if (weatherData == null) {
     return (
       <View style={styles.container}>
+        <SearchBar fetchWeatherData={fetchWeatherData} />
+        <Text style={styles.primaryText}>city not found</Text>
       </View>
     )
 
@@ -49,7 +51,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Weather weatherData={weatherData} />
+      <Weather weatherData={weatherData} fetchWeatherData={fetchWeatherData} />
     </View>
   );
 }
@@ -61,5 +63,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
+  primaryText: {
+    margin: 20,
+    fontSize: 28
+  }
 });
